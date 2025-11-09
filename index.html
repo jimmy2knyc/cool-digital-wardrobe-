@@ -1378,8 +1378,8 @@
                         <!-- Rewards Summary -->
                         <div style="background: linear-gradient(135deg, #FFD700, #FFA500); padding: 16px; border-radius: 16px; margin-bottom: 20px; text-align: center; color: white;">
                             <h3 style="margin-bottom: 8px;">🎁 Rewards Available!</h3>
-                            <p style="font-size: 14px;">You have 2,450 points to redeem</p>
-                            <button style="background: white; color: #FFA500; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; margin-top: 12px; cursor: pointer;">Visit Rewards Store</button>
+                            <p style="font-size: 14px;">You have <span id="insightsPoints">2,450</span> points to redeem</p>
+                            <button onclick="switchScreen('rewards', document.querySelector('.nav-item:nth-child(4)'))" style="background: white; color: #FFA500; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; margin-top: 12px; cursor: pointer;">Visit Rewards Store</button>
                         </div>
 
                         <div class="insight-card">
@@ -1452,6 +1452,220 @@
                     </div>
                 </div>
 
+                <!-- Screen 4: Rewards Store -->
+                <div class="screen-view" id="rewardsView">
+                    <div class="rewards-screen" style="padding: 24px;">
+                        <!-- Points Balance -->
+                        <div style="background: linear-gradient(135deg, #FFD700, #FFA500); padding: 24px; border-radius: 20px; margin-bottom: 24px; text-align: center; color: white; position: relative; overflow: hidden;">
+                            <div style="position: absolute; top: 0; right: 0; width: 100px; height: 100px; background: rgba(255,255,255,0.1); border-radius: 50%; transform: translate(30px, -30px);"></div>
+                            <h3 style="font-size: 16px; margin-bottom: 8px; opacity: 0.9;">Your Balance</h3>
+                            <div style="font-size: 48px; font-weight: 700; margin-bottom: 8px; position: relative; z-index: 1;">
+                                <span style="animation: coinSpin 3s infinite linear;">🪙</span>
+                                <span id="rewardPoints">2,450</span>
+                            </div>
+                            <p style="font-size: 14px; opacity: 0.9;">Earn more points by completing daily challenges!</p>
+                        </div>
+
+                        <!-- Reward Categories -->
+                        <div style="display: flex; gap: 12px; margin-bottom: 20px; overflow-x: auto; padding: 4px;">
+                            <button class="reward-tab active" onclick="filterRewards('all', this)" style="padding: 8px 16px; background: #1d1d1f; color: white; border: none; border-radius: 20px; font-size: 14px; cursor: pointer; white-space: nowrap; transition: all 0.3s ease;">All Rewards</button>
+                            <button class="reward-tab" onclick="filterRewards('discounts', this)" style="padding: 8px 16px; background: #f5f5f7; color: #515154; border: none; border-radius: 20px; font-size: 14px; cursor: pointer; white-space: nowrap; transition: all 0.3s ease;">Discounts</button>
+                            <button class="reward-tab" onclick="filterRewards('features', this)" style="padding: 8px 16px; background: #f5f5f7; color: #515154; border: none; border-radius: 20px; font-size: 14px; cursor: pointer; white-space: nowrap; transition: all 0.3s ease;">Features</button>
+                            <button class="reward-tab" onclick="filterRewards('exclusive', this)" style="padding: 8px 16px; background: #f5f5f7; color: #515154; border: none; border-radius: 20px; font-size: 14px; cursor: pointer; white-space: nowrap; transition: all 0.3s ease;">Exclusive</button>
+                        </div>
+
+                        <!-- Limited Time Offers -->
+                        <div style="background: linear-gradient(135deg, #ff6b6b, #ff8e53); padding: 16px; border-radius: 16px; margin-bottom: 20px; color: white;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <h4 style="margin-bottom: 4px;">⏰ Flash Deal!</h4>
+                                    <p style="font-size: 14px; opacity: 0.9;">50% off Premium Upgrade</p>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 20px; font-weight: 700;">1,000</div>
+                                    <div style="font-size: 12px; text-decoration: line-through; opacity: 0.7;">2,000 pts</div>
+                                </div>
+                            </div>
+                            <button onclick="redeemReward('Premium Upgrade', 1000, event)" style="width: 100%; margin-top: 12px; background: white; color: #ff6b6b; border: none; padding: 10px; border-radius: 12px; font-weight: 600; cursor: pointer;">Redeem Now</button>
+                        </div>
+
+                        <!-- Rewards Grid -->
+                        <h3 style="margin-bottom: 16px; color: #1d1d1f;">Available Rewards</h3>
+                        
+                        <div class="rewards-grid" style="display: grid; gap: 16px;">
+                            <!-- Discount Rewards -->
+                            <div class="reward-card" data-category="discounts" style="background: white; padding: 16px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: all 0.3s ease; cursor: pointer;" onclick="this.style.transform='scale(1.02)';" onmouseout="this.style.transform=''">
+                                <div style="display: flex; justify-content: space-between; align-items: start;">
+                                    <div>
+                                        <div style="font-size: 24px; margin-bottom: 8px;">🏷️</div>
+                                        <h4 style="color: #1d1d1f; margin-bottom: 4px;">10% Off Partner Brands</h4>
+                                        <p style="font-size: 14px; color: #86868b; margin-bottom: 8px;">Valid for 30 days at select retailers</p>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="background: #e8f5e9; color: #34c759; padding: 4px 8px; border-radius: 8px; font-size: 12px; font-weight: 600;">Available</span>
+                                            <span style="font-size: 12px; color: #86868b;">23 left</span>
+                                        </div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 20px; font-weight: 700; color: #667eea;">500</div>
+                                        <div style="font-size: 12px; color: #86868b;">points</div>
+                                        <button onclick="redeemReward('10% Discount', 500, event)" style="margin-top: 8px; background: #667eea; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: pointer;">Redeem</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="reward-card" data-category="discounts" style="background: white; padding: 16px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: all 0.3s ease; cursor: pointer;" onclick="this.style.transform='scale(1.02)';" onmouseout="this.style.transform=''">
+                                <div style="display: flex; justify-content: space-between; align-items: start;">
+                                    <div>
+                                        <div style="font-size: 24px; margin-bottom: 8px;">🎫</div>
+                                        <h4 style="color: #1d1d1f; margin-bottom: 4px;">$25 Gift Card</h4>
+                                        <p style="font-size: 14px; color: #86868b; margin-bottom: 8px;">Redeemable at any partner store</p>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="background: #e8f5e9; color: #34c759; padding: 4px 8px; border-radius: 8px; font-size: 12px; font-weight: 600;">Available</span>
+                                            <span style="font-size: 12px; color: #86868b;">Limited</span>
+                                        </div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 20px; font-weight: 700; color: #667eea;">2,500</div>
+                                        <div style="font-size: 12px; color: #86868b;">points</div>
+                                        <button onclick="showNotification('Just 50 more points needed!')" style="margin-top: 8px; background: #e5e5e7; color: #86868b; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: not-allowed;" disabled>Need 50</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Feature Rewards -->
+                            <div class="reward-card" data-category="features" style="background: white; padding: 16px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: all 0.3s ease; cursor: pointer;" onclick="this.style.transform='scale(1.02)';" onmouseout="this.style.transform=''">
+                                <div style="display: flex; justify-content: space-between; align-items: start;">
+                                    <div>
+                                        <div style="font-size: 24px; margin-bottom: 8px;">🎨</div>
+                                        <h4 style="color: #1d1d1f; margin-bottom: 4px;">Custom Theme Colors</h4>
+                                        <p style="font-size: 14px; color: #86868b; margin-bottom: 8px;">Personalize your app appearance</p>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="background: #e8f5e9; color: #34c759; padding: 4px 8px; border-radius: 8px; font-size: 12px; font-weight: 600;">Unlockable</span>
+                                        </div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 20px; font-weight: 700; color: #667eea;">300</div>
+                                        <div style="font-size: 12px; color: #86868b;">points</div>
+                                        <button onclick="redeemReward('Custom Theme', 300, event)" style="margin-top: 8px; background: #667eea; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: pointer;">Unlock</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="reward-card" data-category="features" style="background: white; padding: 16px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: all 0.3s ease; cursor: pointer;" onclick="this.style.transform='scale(1.02)';" onmouseout="this.style.transform=''">
+                                <div style="display: flex; justify-content: space-between; align-items: start;">
+                                    <div>
+                                        <div style="font-size: 24px; margin-bottom: 8px;">📊</div>
+                                        <h4 style="color: #1d1d1f; margin-bottom: 4px;">Advanced Analytics</h4>
+                                        <p style="font-size: 14px; color: #86868b; margin-bottom: 8px;">Detailed style insights & trends</p>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="background: #e8f5e9; color: #34c759; padding: 4px 8px; border-radius: 8px; font-size: 12px; font-weight: 600;">Unlockable</span>
+                                        </div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 20px; font-weight: 700; color: #667eea;">750</div>
+                                        <div style="font-size: 12px; color: #86868b;">points</div>
+                                        <button onclick="redeemReward('Analytics Pack', 750, event)" style="margin-top: 8px; background: #667eea; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: pointer;">Unlock</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Exclusive Rewards -->
+                            <div class="reward-card" data-category="exclusive" style="background: linear-gradient(135deg, #f5f5f7, #e8e8ea); padding: 16px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: all 0.3s ease; cursor: pointer; border: 2px solid #FFD700;" onclick="this.style.transform='scale(1.02)';" onmouseout="this.style.transform=''">
+                                <div style="display: flex; justify-content: space-between; align-items: start;">
+                                    <div>
+                                        <div style="font-size: 24px; margin-bottom: 8px;">👑</div>
+                                        <h4 style="color: #1d1d1f; margin-bottom: 4px;">VIP Stylist Session</h4>
+                                        <p style="font-size: 14px; color: #86868b; margin-bottom: 8px;">1-on-1 virtual styling consultation</p>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="background: linear-gradient(135deg, #FFD700, #FFA500); color: white; padding: 4px 8px; border-radius: 8px; font-size: 12px; font-weight: 600;">Exclusive</span>
+                                            <span style="font-size: 12px; color: #86868b;">Level 10+</span>
+                                        </div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 20px; font-weight: 700; color: #FFD700;">5,000</div>
+                                        <div style="font-size: 12px; color: #86868b;">points</div>
+                                        <button onclick="showNotification('Reach Level 10 to unlock!')" style="margin-top: 8px; background: #e5e5e7; color: #86868b; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: not-allowed;" disabled>Locked</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="reward-card" data-category="exclusive" style="background: linear-gradient(135deg, #f5f5f7, #e8e8ea); padding: 16px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: all 0.3s ease; cursor: pointer; border: 2px solid #764ba2;" onclick="this.style.transform='scale(1.02)';" onmouseout="this.style.transform=''">
+                                <div style="display: flex; justify-content: space-between; align-items: start;">
+                                    <div>
+                                        <div style="font-size: 24px; margin-bottom: 8px;">🏆</div>
+                                        <h4 style="color: #1d1d1f; margin-bottom: 4px;">Lifetime Premium</h4>
+                                        <p style="font-size: 14px; color: #86868b; margin-bottom: 8px;">All features forever, no subscription</p>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 4px 8px; border-radius: 8px; font-size: 12px; font-weight: 600;">Ultimate</span>
+                                            <span style="font-size: 12px; color: #86868b;">Only 5 available</span>
+                                        </div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 20px; font-weight: 700; color: #764ba2;">10,000</div>
+                                        <div style="font-size: 12px; color: #86868b;">points</div>
+                                        <button onclick="showNotification('Keep earning! You can do it!')" style="margin-top: 8px; background: #e5e5e7; color: #86868b; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: not-allowed;" disabled>Save up</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Donation Option -->
+                            <div class="reward-card" data-category="all" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9); padding: 16px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: all 0.3s ease; cursor: pointer;" onclick="this.style.transform='scale(1.02)';" onmouseout="this.style.transform=''">
+                                <div style="display: flex; justify-content: space-between; align-items: start;">
+                                    <div>
+                                        <div style="font-size: 24px; margin-bottom: 8px;">💚</div>
+                                        <h4 style="color: #1d1d1f; margin-bottom: 4px;">Donate to Charity</h4>
+                                        <p style="font-size: 14px; color: #515154; margin-bottom: 8px;">Support sustainable fashion initiatives</p>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="background: white; color: #34c759; padding: 4px 8px; border-radius: 8px; font-size: 12px; font-weight: 600;">Feel Good</span>
+                                            <span style="font-size: 12px; color: #515154;">Tax deductible</span>
+                                        </div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 20px; font-weight: 700; color: #34c759;">Any</div>
+                                        <div style="font-size: 12px; color: #515154;">amount</div>
+                                        <button onclick="redeemReward('Charity Donation', 100, event)" style="margin-top: 8px; background: #34c759; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: pointer;">Donate</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- How to Earn More -->
+                        <div style="background: #fafafa; padding: 20px; border-radius: 16px; margin-top: 24px;">
+                            <h4 style="margin-bottom: 16px; color: #1d1d1f;">💡 Ways to Earn More Points</h4>
+                            <div style="display: grid; gap: 12px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: white; border-radius: 8px;">
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        <span style="font-size: 20px;">📸</span>
+                                        <span style="font-size: 14px; color: #515154;">Daily outfit photo</span>
+                                    </div>
+                                    <span style="font-weight: 600; color: #667eea;">+50 pts/day</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: white; border-radius: 8px;">
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        <span style="font-size: 20px;">🎯</span>
+                                        <span style="font-size: 14px; color: #515154;">Complete daily challenge</span>
+                                    </div>
+                                    <span style="font-weight: 600; color: #667eea;">+500 pts</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: white; border-radius: 8px;">
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        <span style="font-size: 20px;">🔥</span>
+                                        <span style="font-size: 14px; color: #515154;">7-day streak</span>
+                                    </div>
+                                    <span style="font-weight: 600; color: #667eea;">+1000 pts</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: white; border-radius: 8px;">
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        <span style="font-size: 20px;">👥</span>
+                                        <span style="font-size: 14px; color: #515154;">Refer a friend</span>
+                                    </div>
+                                    <span style="font-weight: 600; color: #667eea;">+2000 pts</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Bottom Navigation -->
                 <div class="bottom-nav">
                     <div class="nav-item active" onclick="switchScreen('capture', this)">
@@ -1466,9 +1680,13 @@
                     <div class="nav-item" onclick="switchScreen('insights', this)" style="position: relative;">
                         <div class="nav-icon">◆</div>
                         <div>Insights</div>
-                        <span style="position: absolute; top: 2px; right: 20px; width: 8px; height: 8px; background: #34c759; border-radius: 50%; animation: pulse 2s infinite;"></span>
                     </div>
-                    <div class="nav-item" onclick="showNotification('Closet feature with wardrobe management coming soon!')">
+                    <div class="nav-item" onclick="switchScreen('rewards', this)" style="position: relative;">
+                        <div class="nav-icon">🎁</div>
+                        <div>Rewards</div>
+                        <span style="position: absolute; top: 2px; right: 20px; width: 8px; height: 8px; background: #FFD700; border-radius: 50%; animation: pulse 2s infinite;"></span>
+                    </div>
+                    <div class="nav-item" onclick="showNotification('Closet feature coming soon!')">
                         <div class="nav-icon">☰</div>
                         <div>Closet</div>
                     </div>
@@ -1532,6 +1750,16 @@
                     title = "Your Insights";
                     subtitle = "Personalized for you";
                     break;
+                case 'rewards':
+                    document.getElementById('rewardsView').classList.add('active');
+                    title = "Rewards Store";
+                    subtitle = "Redeem your points";
+                    // Update points display
+                    const points = document.getElementById('userPoints');
+                    if (points) {
+                        document.getElementById('rewardPoints').textContent = points.textContent;
+                    }
+                    break;
             }
             
             // Update header
@@ -1540,6 +1768,65 @@
             
             // Set active nav
             navElement.classList.add('active');
+        }
+
+        // Filter rewards
+        function filterRewards(category, button) {
+            // Update active tab
+            document.querySelectorAll('.reward-tab').forEach(tab => {
+                tab.style.background = '#f5f5f7';
+                tab.style.color = '#515154';
+            });
+            button.style.background = '#1d1d1f';
+            button.style.color = 'white';
+            
+            // Show/hide reward cards
+            document.querySelectorAll('.reward-card').forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Redeem reward
+        function redeemReward(rewardName, cost, event) {
+            if (event) event.stopPropagation();
+            
+            const currentPoints = parseInt(document.getElementById('rewardPoints').textContent);
+            
+            if (currentPoints >= cost) {
+                // Deduct points
+                const newPoints = currentPoints - cost;
+                
+                // Update all point displays
+                document.getElementById('rewardPoints').textContent = newPoints;
+                const userPoints = document.getElementById('userPoints');
+                if (userPoints) userPoints.textContent = newPoints;
+                const insightsPoints = document.getElementById('insightsPoints');
+                if (insightsPoints) insightsPoints.textContent = newPoints;
+                
+                // Show success message
+                showNotification(`🎉 ${rewardName} redeemed successfully! Check your email for details.`);
+                
+                // Show achievement
+                setTimeout(() => {
+                    if (cost >= 1000) {
+                        showAchievement('Big Spender', true);
+                    }
+                }, 500);
+                
+                // Disable button if it was a one-time reward
+                if (event && event.target.tagName === 'BUTTON') {
+                    event.target.textContent = 'Redeemed';
+                    event.target.style.background = '#34c759';
+                    event.target.disabled = true;
+                    event.target.style.cursor = 'default';
+                }
+            } else {
+                showNotification(`Need ${cost - currentPoints} more points for ${rewardName}!`);
+            }
         }
 
         // Handle capture
@@ -1612,7 +1899,15 @@
                 const pointsDisplay = document.getElementById('userPoints');
                 if (pointsDisplay) {
                     const currentPoints = parseInt(pointsDisplay.textContent);
-                    pointsDisplay.textContent = currentPoints + pointsEarned;
+                    const newTotalPoints = currentPoints + pointsEarned;
+                    pointsDisplay.textContent = newTotalPoints;
+                    
+                    // Update all point displays
+                    const rewardPoints = document.getElementById('rewardPoints');
+                    if (rewardPoints) rewardPoints.textContent = newTotalPoints;
+                    
+                    const insightsPoints = document.getElementById('insightsPoints');
+                    if (insightsPoints) insightsPoints.textContent = newTotalPoints;
                 }
                 
                 setTimeout(() => {
