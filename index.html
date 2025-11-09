@@ -347,6 +347,334 @@
             z-index: 1;
         }
 
+        /* New Gamification Elements */
+        .level-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-top: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .points-display {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.15);
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .points-display .coin {
+            font-size: 20px;
+            animation: coinSpin 3s infinite linear;
+        }
+
+        @keyframes coinSpin {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
+        }
+
+        .achievement-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: white;
+            padding: 32px;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            z-index: 1000;
+            text-align: center;
+            animation: popIn 0.5s ease forwards;
+        }
+
+        @keyframes popIn {
+            to {
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .achievement-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            animation: bounce 0.5s ease;
+        }
+
+        .daily-challenge-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .daily-challenge-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+        }
+
+        .challenge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .challenge-title {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .challenge-reward {
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .badge-item {
+            aspect-ratio: 1;
+            background: #f5f5f7;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .badge-item.unlocked {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            animation: levelUp 0.5s ease;
+        }
+
+        .badge-item.locked {
+            opacity: 0.4;
+            filter: grayscale(100%);
+        }
+
+        .badge-item:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .badge-icon {
+            font-size: 32px;
+            margin-bottom: 4px;
+        }
+
+        .badge-name {
+            font-size: 10px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .progress-ring {
+            width: 60px;
+            height: 60px;
+            position: relative;
+        }
+
+        .progress-ring svg {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring circle {
+            fill: none;
+            stroke-width: 4;
+        }
+
+        .progress-ring .background {
+            stroke: #e5e5e7;
+        }
+
+        .progress-ring .progress {
+            stroke: #667eea;
+            stroke-dasharray: 157;
+            stroke-dashoffset: 50;
+            transition: stroke-dashoffset 0.5s ease;
+            stroke-linecap: round;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .leaderboard-mini {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            margin-top: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .leaderboard-mini h4 {
+            font-size: 16px;
+            margin-bottom: 16px;
+            color: #1d1d1f;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+
+        .rank-badge {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 12px;
+            margin-right: 12px;
+        }
+
+        .rank-badge.gold {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: white;
+        }
+
+        .rank-badge.silver {
+            background: linear-gradient(135deg, #C0C0C0, #B8B8B8);
+            color: white;
+        }
+
+        .rank-badge.bronze {
+            background: linear-gradient(135deg, #CD7F32, #B87333);
+            color: white;
+        }
+
+        .rank-badge.other {
+            background: #f5f5f7;
+            color: #515154;
+        }
+
+        .player-name {
+            flex: 1;
+            font-weight: 500;
+            color: #1d1d1f;
+        }
+
+        .player-points {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .xp-bar {
+            background: #e5e5e7;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+
+        .xp-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            width: 65%;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .xp-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 20px;
+            height: 100%;
+            background: rgba(255,255,255,0.3);
+            animation: shimmer 2s infinite;
+        }
+
+        .quest-tracker {
+            background: #fafafa;
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 16px;
+        }
+
+        .quest-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 14px;
+        }
+
+        .quest-item.completed {
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+
+        .quest-check {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #e5e5e7;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quest-check.checked {
+            background: #34c759;
+            border-color: #34c759;
+        }
+
+        .milestone-banner {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: white;
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        .bonus-multiplier {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #ff6b6b;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            animation: bounce 1s infinite;
+        }
+
         .stat-cards {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -797,6 +1125,11 @@
                         <div class="date-badge">
                             <span id="currentDate">Thursday, November 6</span>
                         </div>
+
+                        <!-- Milestone Banner -->
+                        <div class="milestone-banner" style="display: none;" id="milestoneBanner">
+                            🎉 You're on fire! 7-day streak milestone reached!
+                        </div>
                         
                         <img class="image-preview" id="imagePreview" />
                         
@@ -804,20 +1137,51 @@
                             <div class="camera-icon">+</div>
                             <p style="color: #515154; font-weight: 500;">Add today's outfit</p>
                             <p style="color: #86868b; font-size: 14px; margin-top: 8px;">Tap to simulate capture</p>
+                            <div style="margin-top: 16px; background: #667eea; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px;">
+                                +50 XP for daily photo
+                            </div>
                         </div>
 
                         <div class="reflection-box">
                             <h3>Quick reflection</h3>
                             <div class="feeling-pills">
-                                <div class="pill active" onclick="selectPill(this)">Love it</div>
-                                <div class="pill" onclick="selectPill(this)">It's okay</div>
-                                <div class="pill" onclick="selectPill(this)">Something's missing</div>
+                                <div class="pill active" onclick="selectPill(this)" data-points="20">Love it</div>
+                                <div class="pill" onclick="selectPill(this)" data-points="10">It's okay</div>
+                                <div class="pill" onclick="selectPill(this)" data-points="30">Something's missing</div>
                             </div>
-                            <textarea class="notes-input" placeholder="Optional notes..." rows="3"></textarea>
+                            <textarea class="notes-input" placeholder="Optional notes (+25 XP for detailed reflection)..." rows="3"></textarea>
+                            
+                            <!-- Today's Style Goals -->
+                            <div style="margin-top: 16px; padding: 12px; background: #f5f5f7; border-radius: 8px;">
+                                <p style="font-size: 12px; color: #86868b; margin-bottom: 8px;">Today's Style Goals:</p>
+                                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                                    <span style="background: white; padding: 4px 8px; border-radius: 6px; font-size: 12px;">🎨 Try a new color</span>
+                                    <span style="background: white; padding: 4px 8px; border-radius: 6px; font-size: 12px;">♻️ Repeat an item</span>
+                                    <span style="background: white; padding: 4px 8px; border-radius: 6px; font-size: 12px;">✨ Accessorize</span>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="cta-button" id="saveBtn" onclick="saveEntry()">Save Entry</div>
                         <div class="loading-spinner" id="loadingSpinner"></div>
+
+                        <!-- Combo Tracker -->
+                        <div style="margin-top: 20px; padding: 16px; background: #fafafa; border-radius: 12px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <h4 style="font-size: 14px; color: #1d1d1f;">Weekly Combo</h4>
+                                <span style="background: #667eea; color: white; padding: 4px 8px; border-radius: 8px; font-size: 12px;">3x multiplier</span>
+                            </div>
+                            <div style="display: flex; gap: 8px;">
+                                <div style="flex: 1; height: 8px; background: #34c759; border-radius: 4px;"></div>
+                                <div style="flex: 1; height: 8px; background: #34c759; border-radius: 4px;"></div>
+                                <div style="flex: 1; height: 8px; background: #34c759; border-radius: 4px;"></div>
+                                <div style="flex: 1; height: 8px; background: #e5e5e7; border-radius: 4px;"></div>
+                                <div style="flex: 1; height: 8px; background: #e5e5e7; border-radius: 4px;"></div>
+                                <div style="flex: 1; height: 8px; background: #e5e5e7; border-radius: 4px;"></div>
+                                <div style="flex: 1; height: 8px; background: #e5e5e7; border-radius: 4px;"></div>
+                            </div>
+                            <p style="font-size: 11px; color: #86868b; margin-top: 8px;">4 more days for mega bonus!</p>
+                        </div>
                     </div>
                 </div>
 
@@ -825,8 +1189,124 @@
                 <div class="screen-view" id="analyticsView">
                     <div class="analytics-screen">
                         <div class="streak-banner">
+                            <div class="points-display">
+                                <span class="coin">🪙</span>
+                                <span id="userPoints">2,450</span>
+                            </div>
                             <div class="streak-number" id="streakNumber">12</div>
                             <div class="streak-text">Day streak 🔥</div>
+                            <div class="level-badge">Level 7 • Style Explorer</div>
+                        </div>
+
+                        <!-- Daily Challenge -->
+                        <div class="daily-challenge-card" onclick="completeChallenge(this)">
+                            <div class="bonus-multiplier">2X Points</div>
+                            <div class="challenge-header">
+                                <div class="challenge-title">🎯 Daily Challenge</div>
+                                <div class="challenge-reward">+500 XP</div>
+                            </div>
+                            <p style="font-size: 14px; opacity: 0.9;">Mix patterns: Wear stripes with another pattern today!</p>
+                        </div>
+
+                        <!-- XP Progress -->
+                        <div style="background: white; padding: 16px; border-radius: 12px; margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-weight: 600; color: #1d1d1f;">Level 7</span>
+                                <span style="font-size: 14px; color: #86868b;">1,450 / 2,000 XP</span>
+                            </div>
+                            <div class="xp-bar">
+                                <div class="xp-fill" id="xpBar"></div>
+                            </div>
+                            <p style="font-size: 12px; color: #667eea; margin-top: 8px;">550 XP to Level 8: Fashion Maven</p>
+                        </div>
+
+                        <!-- Badges Section -->
+                        <div style="background: white; padding: 20px; border-radius: 16px; margin-bottom: 20px;">
+                            <h3 style="margin-bottom: 16px; color: #1d1d1f;">Your Achievements</h3>
+                            <div class="badges-grid">
+                                <div class="badge-item unlocked" onclick="showAchievement('Week Warrior')">
+                                    <div class="badge-icon">🏆</div>
+                                    <div class="badge-name">Week Warrior</div>
+                                </div>
+                                <div class="badge-item unlocked" onclick="showAchievement('Early Bird')">
+                                    <div class="badge-icon">🌅</div>
+                                    <div class="badge-name">Early Bird</div>
+                                </div>
+                                <div class="badge-item unlocked" onclick="showAchievement('Mix Master')">
+                                    <div class="badge-icon">🎨</div>
+                                    <div class="badge-name">Mix Master</div>
+                                </div>
+                                <div class="badge-item" onclick="showAchievement('Trendsetter', true)">
+                                    <div class="badge-icon">✨</div>
+                                    <div class="badge-name">Trendsetter</div>
+                                </div>
+                                <div class="badge-item locked">
+                                    <div class="badge-icon">👑</div>
+                                    <div class="badge-name">Style Icon</div>
+                                </div>
+                                <div class="badge-item locked">
+                                    <div class="badge-icon">💎</div>
+                                    <div class="badge-name">100 Days</div>
+                                </div>
+                                <div class="badge-item locked">
+                                    <div class="badge-icon">🌟</div>
+                                    <div class="badge-name">Influencer</div>
+                                </div>
+                                <div class="badge-item locked">
+                                    <div class="badge-icon">🚀</div>
+                                    <div class="badge-name">Legendary</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mini Leaderboard -->
+                        <div class="leaderboard-mini">
+                            <h4>Friends Leaderboard 🏅</h4>
+                            <div class="leaderboard-item">
+                                <div class="rank-badge gold">1</div>
+                                <div class="player-name">Emma</div>
+                                <div class="player-points">3,850 pts</div>
+                            </div>
+                            <div class="leaderboard-item">
+                                <div class="rank-badge silver">2</div>
+                                <div class="player-name">You</div>
+                                <div class="player-points">2,450 pts</div>
+                            </div>
+                            <div class="leaderboard-item">
+                                <div class="rank-badge bronze">3</div>
+                                <div class="player-name">Alex</div>
+                                <div class="player-points">2,100 pts</div>
+                            </div>
+                            <div class="leaderboard-item">
+                                <div class="rank-badge other">4</div>
+                                <div class="player-name">Sophie</div>
+                                <div class="player-points">1,900 pts</div>
+                            </div>
+                        </div>
+
+                        <!-- Daily Quests -->
+                        <div class="quest-tracker">
+                            <h4 style="margin-bottom: 12px; color: #1d1d1f;">Daily Quests</h4>
+                            <div class="quest-item" onclick="toggleQuest(this)">
+                                <span>📸 Upload today's outfit</span>
+                                <div class="quest-check checked"></div>
+                            </div>
+                            <div class="quest-item" onclick="toggleQuest(this)">
+                                <span>💬 Add reflection notes</span>
+                                <div class="quest-check checked"></div>
+                            </div>
+                            <div class="quest-item" onclick="toggleQuest(this)">
+                                <span>🔄 Repeat an item creatively</span>
+                                <div class="quest-check"></div>
+                            </div>
+                            <div class="quest-item" onclick="toggleQuest(this)">
+                                <span>🌈 Wear 3+ colors</span>
+                                <div class="quest-check"></div>
+                            </div>
+                            <div class="quest-item" onclick="toggleQuest(this)">
+                                <span>📱 Share your style</span>
+                                <div class="quest-check"></div>
+                            </div>
                         </div>
 
                         <div class="stat-cards">
@@ -895,12 +1375,22 @@
                 <!-- Screen 3: Insights -->
                 <div class="screen-view" id="insightsView">
                     <div class="recommendations-screen">
+                        <!-- Rewards Summary -->
+                        <div style="background: linear-gradient(135deg, #FFD700, #FFA500); padding: 16px; border-radius: 16px; margin-bottom: 20px; text-align: center; color: white;">
+                            <h3 style="margin-bottom: 8px;">🎁 Rewards Available!</h3>
+                            <p style="font-size: 14px;">You have 2,450 points to redeem</p>
+                            <button style="background: white; color: #FFA500; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; margin-top: 12px; cursor: pointer;">Visit Rewards Store</button>
+                        </div>
+
                         <div class="insight-card">
                             <h3>Pattern detected</h3>
                             <p>You've mentioned needing "structured pieces" 5 times. Your wardrobe is 70% casual, but you feel best in polished looks.</p>
+                            <div style="margin-top: 16px; background: rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 12px; display: inline-block;">
+                                <span style="font-size: 14px;">🎯 Insight Level: Advanced</span>
+                            </div>
                         </div>
 
-                        <div class="section-title">Consider adding</div>
+                        <div class="section-title">Consider adding (Earn XP for smart purchases)</div>
 
                         <div class="recommendation-card" onclick="selectRecommendation(this)">
                             <div class="item-preview">◉</div>
@@ -909,6 +1399,7 @@
                                 <p>Navy or charcoal</p>
                                 <div class="match-badge">92% match</div>
                             </div>
+                            <div style="position: absolute; top: 10px; right: 10px; background: #667eea; color: white; padding: 4px 8px; border-radius: 8px; font-size: 11px;">+300 XP</div>
                         </div>
 
                         <div class="recommendation-card" onclick="selectRecommendation(this)">
@@ -918,6 +1409,7 @@
                                 <p>Brown, mid-height</p>
                                 <div class="match-badge">88% match</div>
                             </div>
+                            <div style="position: absolute; top: 10px; right: 10px; background: #667eea; color: white; padding: 4px 8px; border-radius: 8px; font-size: 11px;">+250 XP</div>
                         </div>
 
                         <div class="recommendation-card" onclick="selectRecommendation(this)">
@@ -927,11 +1419,35 @@
                                 <p>Classic fit</p>
                                 <div class="match-badge">85% match</div>
                             </div>
+                            <div style="position: absolute; top: 10px; right: 10px; background: #667eea; color: white; padding: 4px 8px; border-radius: 8px; font-size: 11px;">+200 XP</div>
+                        </div>
+
+                        <!-- Purchase Validation -->
+                        <div style="background: #e8f3ff; padding: 16px; border-radius: 12px; margin-top: 20px;">
+                            <h4 style="color: #0066cc; margin-bottom: 8px;">🏆 Smart Shopper Challenge</h4>
+                            <p style="color: #0066cc; font-size: 14px; margin-bottom: 12px;">Buy only recommended items this month to earn the "Mindful Buyer" badge!</p>
+                            <div style="display: flex; gap: 8px;">
+                                <div style="flex: 1; height: 8px; background: #0066cc; border-radius: 4px;"></div>
+                                <div style="flex: 1; height: 8px; background: #e5e5e7; border-radius: 4px;"></div>
+                                <div style="flex: 1; height: 8px; background: #e5e5e7; border-radius: 4px;"></div>
+                            </div>
+                            <p style="font-size: 11px; color: #0066cc; margin-top: 8px;">1 of 3 mindful purchases made</p>
                         </div>
 
                         <div class="tip-card">
                             <h4>💡 Shopping tip</h4>
                             <p>Focus on neutrals that match your existing palette. You wear black, white, and gray 80% of the time.</p>
+                        </div>
+
+                        <!-- Social Sharing -->
+                        <div style="background: #fafafa; padding: 16px; border-radius: 12px; margin-top: 20px; text-align: center;">
+                            <h4 style="margin-bottom: 12px; color: #1d1d1f;">Share Your Style Journey</h4>
+                            <div style="display: flex; gap: 12px; justify-content: center;">
+                                <button style="background: #1d1d1f; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer;">📱 Instagram</button>
+                                <button style="background: #1d1d1f; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer;">🐦 Twitter</button>
+                                <button style="background: #1d1d1f; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer;">👥 Friends</button>
+                            </div>
+                            <p style="font-size: 12px; color: #86868b; margin-top: 8px;">+100 XP for each share</p>
                         </div>
                     </div>
                 </div>
@@ -942,15 +1458,17 @@
                         <div class="nav-icon">●</div>
                         <div>Today</div>
                     </div>
-                    <div class="nav-item" onclick="switchScreen('analytics', this)">
+                    <div class="nav-item" onclick="switchScreen('analytics', this)" style="position: relative;">
                         <div class="nav-icon">◐</div>
                         <div>Stats</div>
+                        <span style="position: absolute; top: 2px; right: 18px; width: 8px; height: 8px; background: #ff6b6b; border-radius: 50%; animation: pulse 2s infinite;"></span>
                     </div>
-                    <div class="nav-item" onclick="switchScreen('insights', this)">
+                    <div class="nav-item" onclick="switchScreen('insights', this)" style="position: relative;">
                         <div class="nav-icon">◆</div>
                         <div>Insights</div>
+                        <span style="position: absolute; top: 2px; right: 20px; width: 8px; height: 8px; background: #34c759; border-radius: 50%; animation: pulse 2s infinite;"></span>
                     </div>
-                    <div class="nav-item" onclick="showNotification('Closet feature coming soon!')">
+                    <div class="nav-item" onclick="showNotification('Closet feature with wardrobe management coming soon!')">
                         <div class="nav-icon">☰</div>
                         <div>Closet</div>
                     </div>
@@ -1042,6 +1560,12 @@
                 pill.classList.remove('active');
             });
             element.classList.add('active');
+            
+            // Show points for selection
+            const points = element.getAttribute('data-points');
+            if (points) {
+                showNotification(`+${points} XP for reflection!`);
+            }
         }
 
         // Save entry
@@ -1058,11 +1582,38 @@
                 btn.classList.add('success');
                 btn.textContent = '✓ Saved!';
                 
-                showNotification('Outfit saved successfully! Keep up the streak! 🔥');
+                // Calculate points earned
+                let pointsEarned = 50; // Base points for daily photo
+                const activeReflection = document.querySelector('.pill.active');
+                if (activeReflection) {
+                    pointsEarned += parseInt(activeReflection.getAttribute('data-points') || 10);
+                }
+                const notesText = document.querySelector('.notes-input').value;
+                if (notesText.length > 20) {
+                    pointsEarned += 25; // Bonus for detailed notes
+                }
+                
+                showNotification(`Outfit saved! +${pointsEarned} XP earned! 🎉`);
                 
                 // Update streak
                 const currentStreak = parseInt(document.getElementById('streakNumber').textContent);
-                document.getElementById('streakNumber').textContent = currentStreak + 1;
+                const newStreak = currentStreak + 1;
+                document.getElementById('streakNumber').textContent = newStreak;
+                
+                // Check for milestone
+                if (newStreak % 7 === 0) {
+                    setTimeout(() => {
+                        document.getElementById('milestoneBanner').style.display = 'block';
+                        showAchievement('Week Warrior', true);
+                    }, 1000);
+                }
+                
+                // Update points display if visible
+                const pointsDisplay = document.getElementById('userPoints');
+                if (pointsDisplay) {
+                    const currentPoints = parseInt(pointsDisplay.textContent);
+                    pointsDisplay.textContent = currentPoints + pointsEarned;
+                }
                 
                 setTimeout(() => {
                     btn.classList.remove('success');
@@ -1072,7 +1623,7 @@
                     document.getElementById('captureBox').style.display = 'flex';
                     document.getElementById('imagePreview').style.display = 'none';
                     document.querySelector('.notes-input').value = '';
-                }, 2000);
+                }, 2500);
             }, 1500);
         }
 
@@ -1115,11 +1666,90 @@
             }, 300);
         }
 
+        // Complete daily challenge
+        function completeChallenge(element) {
+            if (!element.classList.contains('completed')) {
+                element.classList.add('completed');
+                element.style.background = 'linear-gradient(135deg, #34c759, #30d158)';
+                
+                // Add points
+                const pointsDisplay = document.getElementById('userPoints');
+                const currentPoints = parseInt(pointsDisplay.textContent);
+                const newPoints = currentPoints + 500;
+                pointsDisplay.textContent = newPoints;
+                
+                // Animate XP bar
+                const xpBar = document.getElementById('xpBar');
+                xpBar.style.width = '85%';
+                
+                showNotification('Challenge Complete! +500 XP 🎉');
+                
+                // Show achievement popup
+                setTimeout(() => {
+                    showAchievement('Challenge Master');
+                }, 500);
+            }
+        }
+
+        // Toggle quest completion
+        function toggleQuest(element) {
+            const checkbox = element.querySelector('.quest-check');
+            if (!checkbox.classList.contains('checked')) {
+                checkbox.classList.add('checked');
+                element.classList.add('completed');
+                
+                // Add points
+                const pointsDisplay = document.getElementById('userPoints');
+                const currentPoints = parseInt(pointsDisplay.textContent);
+                const newPoints = currentPoints + 100;
+                pointsDisplay.textContent = newPoints;
+                
+                showNotification('Quest Complete! +100 XP');
+            }
+        }
+
+        // Show achievement popup
+        function showAchievement(name, isNew = false) {
+            // Create achievement popup
+            const popup = document.createElement('div');
+            popup.className = 'achievement-popup';
+            popup.innerHTML = `
+                <div class="achievement-icon">${isNew ? '🏆' : '✅'}</div>
+                <h3 style="margin-bottom: 8px; color: #1d1d1f;">${isNew ? 'New Achievement Unlocked!' : 'Achievement'}</h3>
+                <p style="font-size: 18px; font-weight: 600; color: #667eea;">${name}</p>
+                ${isNew ? '<p style="color: #86868b; margin-top: 8px;">+250 Bonus Points!</p>' : ''}
+            `;
+            document.body.appendChild(popup);
+            
+            // Auto close after 3 seconds
+            setTimeout(() => {
+                popup.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(popup);
+                }, 300);
+            }, 3000);
+            
+            // If new achievement, update points
+            if (isNew) {
+                const pointsDisplay = document.getElementById('userPoints');
+                const currentPoints = parseInt(pointsDisplay.textContent);
+                pointsDisplay.textContent = currentPoints + 250;
+            }
+        }
+
         // Add some initial animations
         window.addEventListener('load', () => {
             document.querySelectorAll('.stat-card, .recommendation-card, .color-box').forEach((el, i) => {
                 el.style.animation = `fadeIn 0.5s ease-out ${i * 0.1}s backwards`;
             });
+
+            // Check for milestone
+            const streak = parseInt(document.getElementById('streakNumber').textContent);
+            if (streak % 7 === 0 && streak > 0) {
+                setTimeout(() => {
+                    showNotification('🎊 Weekly Milestone! Bonus rewards unlocked!');
+                }, 1500);
+            }
         });
     </script>
 
