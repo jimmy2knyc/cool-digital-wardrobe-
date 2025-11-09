@@ -1,65 +1,1334 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Wardrobe - Interactive MVP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f5f7 0%, #e8e8ea 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #1d1d1f;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes countUp {
+            from { transform: scale(0.8) rotate(-5deg); opacity: 0; }
+            to { transform: scale(1) rotate(0); opacity: 1; }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .container {
+            max-width: 450px;
+            margin: 0 auto;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #1d1d1f, #515154);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s infinite linear;
+            background-size: 200% 100%;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            color: #86868b;
+        }
+
+        .phone-mockup {
+            background: #fff;
+            border-radius: 40px;
+            padding: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            height: 844px;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .phone-mockup:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 70px rgba(0,0,0,0.2);
+        }
+
+        .phone-screen {
+            background: #ffffff;
+            border-radius: 28px;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .status-bar {
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #1d1d1f;
+            font-weight: 500;
+        }
+
+        .app-header {
+            padding: 24px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .app-header h2 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1d1d1f;
+            letter-spacing: -0.5px;
+        }
+
+        .app-header .subtitle {
+            color: #86868b;
+            margin-top: 4px;
+            font-size: 16px;
+        }
+
+        /* Screen Views */
+        .screen-view {
+            display: none;
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 80px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .screen-view.active {
+            display: block;
+        }
+
+        /* Screen 1: Daily Capture */
+        .capture-screen {
+            padding: 24px;
+        }
+
+        .date-badge {
+            background: #f5f5f7;
+            padding: 12px 20px;
+            border-radius: 24px;
+            margin-bottom: 24px;
+            text-align: center;
+            font-weight: 500;
+            color: #1d1d1f;
+            font-size: 15px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .capture-box {
+            background: #fafafa;
+            border-radius: 24px;
+            height: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 2px dashed #e5e5e7;
+            margin-bottom: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .capture-box::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(29,29,31,0.1) 0%, transparent 70%);
+            transition: all 0.5s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .capture-box:hover::before {
+            width: 300%;
+            height: 300%;
+        }
+
+        .capture-box:hover {
+            border-color: #1d1d1f;
+            background: #f5f5f7;
+            transform: scale(1.02);
+        }
+
+        .capture-box:active {
+            transform: scale(0.98);
+        }
+
+        .camera-icon {
+            width: 56px;
+            height: 56px;
+            background: #1d1d1f;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin-bottom: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .capture-box:hover .camera-icon {
+            animation: pulse 1s infinite;
+        }
+
+        .reflection-box {
+            background: #fafafa;
+            padding: 24px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+            animation: fadeIn 0.7s ease-out;
+        }
+
+        .reflection-box h3 {
+            font-size: 16px;
+            margin-bottom: 16px;
+            color: #1d1d1f;
+            font-weight: 600;
+        }
+
+        .feeling-pills {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .pill {
+            padding: 10px 20px;
+            border-radius: 24px;
+            font-size: 14px;
+            border: 1.5px solid #e5e5e7;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pill::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: #1d1d1f;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease;
+        }
+
+        .pill:hover {
+            border-color: #86868b;
+            transform: translateY(-2px);
+        }
+
+        .pill:active {
+            transform: translateY(0);
+        }
+
+        .pill.active {
+            background: #1d1d1f;
+            color: white;
+            border-color: #1d1d1f;
+            animation: pulse 0.3s ease;
+        }
+
+        .notes-input {
+            width: 100%;
+            padding: 14px;
+            border: 1.5px solid #e5e5e7;
+            border-radius: 12px;
+            font-size: 15px;
+            resize: none;
+            font-family: inherit;
+            background: white;
+            transition: all 0.2s ease;
+        }
+
+        .notes-input:focus {
+            outline: none;
+            border-color: #1d1d1f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        /* Screen 2: Analytics */
+        .analytics-screen {
+            padding: 24px;
+        }
+
+        .streak-banner {
+            background: linear-gradient(135deg, #1d1d1f 0%, #515154 100%);
+            color: white;
+            padding: 24px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .streak-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+
+        .streak-number {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            position: relative;
+            z-index: 1;
+            animation: countUp 0.5s ease-out;
+        }
+
+        .streak-text {
+            font-size: 16px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: #fafafa;
+            padding: 20px;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            animation: fadeIn 0.6s ease-out backwards;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .stat-card .label {
+            font-size: 12px;
+            color: #86868b;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .stat-card .value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1d1d1f;
+            margin-bottom: 4px;
+        }
+
+        .stat-card .detail {
+            font-size: 14px;
+            color: #515154;
+        }
+
+        .patterns-section {
+            background: #fafafa;
+            padding: 24px;
+            border-radius: 20px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .patterns-section h3 {
+            margin-bottom: 20px;
+            color: #1d1d1f;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .color-palette {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .color-box {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: fadeIn 0.5s ease-out backwards;
+        }
+
+        .color-box:nth-child(1) { animation-delay: 0.1s; }
+        .color-box:nth-child(2) { animation-delay: 0.2s; }
+        .color-box:nth-child(3) { animation-delay: 0.3s; }
+        .color-box:nth-child(4) { animation-delay: 0.4s; }
+        .color-box:nth-child(5) { animation-delay: 0.5s; }
+
+        .color-box:hover {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        .color-box::after {
+            content: attr(data-percent);
+            position: absolute;
+            bottom: -24px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            color: #86868b;
+            font-weight: 500;
+        }
+
+        .progress-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .progress-item:hover {
+            background: #f0f0f0;
+            padding-left: 16px;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: #e5e5e7;
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #1d1d1f;
+            border-radius: 2px;
+            animation: slideIn 1s ease-out;
+        }
+
+        /* Screen 3: Recommendations */
+        .recommendations-screen {
+            padding: 24px;
+        }
+
+        .insight-card {
+            background: linear-gradient(135deg, #1d1d1f 0%, #515154 100%);
+            color: white;
+            padding: 24px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+            animation: fadeIn 0.5s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .insight-card::before {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            top: -50px;
+            right: -50px;
+        }
+
+        .insight-card h3 {
+            margin-bottom: 12px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .insight-card p {
+            line-height: 1.5;
+            opacity: 0.9;
+            font-size: 15px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin: 24px 0 16px;
+        }
+
+        .recommendation-card {
+            background: #fafafa;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            animation: fadeIn 0.6s ease-out backwards;
+        }
+
+        .recommendation-card:nth-child(3) { animation-delay: 0.2s; }
+        .recommendation-card:nth-child(4) { animation-delay: 0.3s; }
+        .recommendation-card:nth-child(5) { animation-delay: 0.4s; }
+
+        .recommendation-card:hover {
+            background: #f5f5f7;
+            transform: translateX(8px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+
+        .recommendation-card:active {
+            transform: translateX(4px);
+        }
+
+        .item-preview {
+            width: 72px;
+            height: 72px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            transition: transform 0.3s ease;
+        }
+
+        .recommendation-card:hover .item-preview {
+            animation: bounce 0.5s ease;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-details h4 {
+            margin-bottom: 6px;
+            color: #1d1d1f;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .item-details p {
+            font-size: 14px;
+            color: #86868b;
+            margin-bottom: 8px;
+        }
+
+        .match-badge {
+            background: #34c759;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            display: inline-block;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+
+        .tip-card {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            padding: 20px;
+            border-radius: 16px;
+            margin-top: 24px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .tip-card h4 {
+            color: #92400e;
+            margin-bottom: 8px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .tip-card p {
+            color: #92400e;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0 20px;
+            border-bottom-left-radius: 28px;
+            border-bottom-right-radius: 28px;
+        }
+
+        .nav-item {
+            text-align: center;
+            color: #86868b;
+            font-size: 11px;
+            padding: 8px 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #1d1d1f;
+            transform: translateX(-50%);
+            transition: width 0.3s ease;
+        }
+
+        .nav-item:hover {
+            color: #515154;
+        }
+
+        .nav-item.active {
+            color: #1d1d1f;
+        }
+
+        .nav-item.active::before {
+            width: 30px;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-item:hover .nav-icon {
+            transform: translateY(-2px);
+        }
+
+        .nav-item:active .nav-icon {
+            transform: scale(0.9);
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #1d1d1f 0%, #515154 100%);
+            color: white;
+            padding: 16px;
+            border-radius: 16px;
+            text-align: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.5s ease;
+        }
+
+        .cta-button:hover::before {
+            width: 300%;
+            height: 300%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+        }
+
+        .cta-button:active {
+            transform: translateY(-1px);
+        }
+
+        .cta-button.success {
+            background: linear-gradient(135deg, #34c759 0%, #30d158 100%);
+            animation: pulse 0.5s ease;
+        }
+
+        .notification {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: white;
+            padding: 16px 24px;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            font-weight: 500;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 40px;
+            height: 40px;
+            margin: 20px auto;
+            border: 3px solid #f0f0f0;
+            border-top: 3px solid #1d1d1f;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .image-preview {
+            display: none;
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            border-radius: 24px;
+            margin-bottom: 24px;
+            animation: fadeIn 0.5s ease;
+        }
+    </style>
 </head>
 <body>
-
-  <div class="menu">
-    <p><a class="navLink" href="index.html">HOME</a></p>
-    <p><a class="navLink" href="page02.html">RESEARCH</a></p>
-    <p><a class="navLink" href="page03.html">LINKS</a></p>
-  </div>
-
-  <div class="logo">@</div>
-
-  <div class="callOutHeader">
-    <h1>CATS</h1>
-    <h3>What are they?</h3>
-  </div>
-
-  <div class="mainContainer">
-
-    <div class="content">
-
-      <h3 class="subTitle">We may never know.</h3>
-
-      <p>Galaxies kindling the energy hidden in matter Euclid circumnavigated vastness is bearable only through love bits of moving fluff.</p>
-
-      <div class="thumbnailContainer">
-        <img class="thumbnail" src="https://placekitten.com/800/600" />
-        <img class="thumbnail" src="https://placekitten.com/80/600" />
-        <img class="thumbnail" src="https://placekitten.com/200/200" />
-      </div>
-
-      <div class="twoColumnContainer">
-        <div class="oneColumn">
-          <p>Network of wormholes tendrils of gossamer clouds Apollonius of Perga as a patch of light as a patch of light concept of the number one?</p>
-          <p>Consequatur consectetur Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt
-          explicabo?</p>
+    <div class="container">
+        <div class="header">
+            <h1>Digital Wardrobe</h1>
+            <p>Your personal style companion</p>
         </div>
-        <div class="oneColumn">
-          <p>Emerged into consciousness totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae.</p>
+
+        <div class="phone-mockup">
+            <div class="phone-screen">
+                <div class="notification" id="notification"></div>
+                
+                <div class="status-bar">
+                    <span id="time">9:41</span>
+                    <span>●●●●●</span>
+                </div>
+                
+                <div class="app-header">
+                    <h2 id="screenTitle">Today's Outfit</h2>
+                    <div class="subtitle" id="screenSubtitle">Day 12 of 28</div>
+                </div>
+
+                <!-- Screen 1: Daily Capture -->
+                <div class="screen-view active" id="captureView">
+                    <div class="capture-screen">
+                        <div class="date-badge">
+                            <span id="currentDate">Thursday, November 6</span>
+                        </div>
+                        
+                        <img class="image-preview" id="imagePreview" />
+                        
+                        <div class="capture-box" id="captureBox" onclick="handleCapture()">
+                            <div class="camera-icon">+</div>
+                            <p style="color: #515154; font-weight: 500;">Add today's outfit</p>
+                            <p style="color: #86868b; font-size: 14px; margin-top: 8px;">Tap to simulate capture</p>
+                        </div>
+
+                        <div class="reflection-box">
+                            <h3>Quick reflection</h3>
+                            <div class="feeling-pills">
+                                <div class="pill active" onclick="selectPill(this)">Love it</div>
+                                <div class="pill" onclick="selectPill(this)">It's okay</div>
+                                <div class="pill" onclick="selectPill(this)">Something's missing</div>
+                            </div>
+                            <textarea class="notes-input" placeholder="Optional notes..." rows="3"></textarea>
+                        </div>
+
+                        <div class="cta-button" id="saveBtn" onclick="saveEntry()">Save Entry</div>
+                        <div class="loading-spinner" id="loadingSpinner"></div>
+                    </div>
+                </div>
+
+                <!-- Screen 2: Analytics -->
+                <div class="screen-view" id="analyticsView">
+                    <div class="analytics-screen">
+                        <div class="streak-banner">
+                            <div class="streak-number" id="streakNumber">12</div>
+                            <div class="streak-text">Day streak 🔥</div>
+                        </div>
+
+                        <div class="stat-cards">
+                            <div class="stat-card" onclick="animateCard(this)">
+                                <div class="label">Most worn</div>
+                                <div class="value">Black Jeans</div>
+                                <div class="detail">7 times</div>
+                            </div>
+                            <div class="stat-card" onclick="animateCard(this)">
+                                <div class="label">Best day</div>
+                                <div class="value">Friday</div>
+                                <div class="detail">Most variety</div>
+                            </div>
+                            <div class="stat-card" onclick="animateCard(this)">
+                                <div class="label">Satisfaction</div>
+                                <div class="value">68%</div>
+                                <div class="detail">↑ Improving</div>
+                            </div>
+                            <div class="stat-card" onclick="animateCard(this)">
+                                <div class="label">Items</div>
+                                <div class="value">23</div>
+                                <div class="detail">Unique pieces</div>
+                            </div>
+                        </div>
+
+                        <div class="patterns-section">
+                            <h3>Color Pattern</h3>
+                            <div class="color-palette">
+                                <div class="color-box" style="background: #1d1d1f;" data-percent="35%" onclick="animateColor(this)"></div>
+                                <div class="color-box" style="background: #f5f5f7;" data-percent="25%" onclick="animateColor(this)"></div>
+                                <div class="color-box" style="background: #515154;" data-percent="20%" onclick="animateColor(this)"></div>
+                                <div class="color-box" style="background: #8b7355;" data-percent="12%" onclick="animateColor(this)"></div>
+                                <div class="color-box" style="background: #86868b;" data-percent="8%" onclick="animateColor(this)"></div>
+                            </div>
+                            
+                            <h3 style="margin-top: 40px;">Material Mix</h3>
+                            <div style="margin-top: 20px;">
+                                <div class="progress-item">
+                                    <span>Cotton/Casual</span>
+                                    <span>45%</span>
+                                </div>
+                                <div class="progress-bar"><div class="progress-fill" style="width: 45%"></div></div>
+                                
+                                <div class="progress-item" style="margin-top: 16px;">
+                                    <span>Denim</span>
+                                    <span>30%</span>
+                                </div>
+                                <div class="progress-bar"><div class="progress-fill" style="width: 30%"></div></div>
+                                
+                                <div class="progress-item" style="margin-top: 16px;">
+                                    <span>Knits</span>
+                                    <span>15%</span>
+                                </div>
+                                <div class="progress-bar"><div class="progress-fill" style="width: 15%"></div></div>
+                                
+                                <div class="progress-item" style="margin-top: 16px;">
+                                    <span>Formal</span>
+                                    <span>10%</span>
+                                </div>
+                                <div class="progress-bar"><div class="progress-fill" style="width: 10%"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Screen 3: Insights -->
+                <div class="screen-view" id="insightsView">
+                    <div class="recommendations-screen">
+                        <div class="insight-card">
+                            <h3>Pattern detected</h3>
+                            <p>You've mentioned needing "structured pieces" 5 times. Your wardrobe is 70% casual, but you feel best in polished looks.</p>
+                        </div>
+
+                        <div class="section-title">Consider adding</div>
+
+                        <div class="recommendation-card" onclick="selectRecommendation(this)">
+                            <div class="item-preview">◉</div>
+                            <div class="item-details">
+                                <h4>Structured Blazer</h4>
+                                <p>Navy or charcoal</p>
+                                <div class="match-badge">92% match</div>
+                            </div>
+                        </div>
+
+                        <div class="recommendation-card" onclick="selectRecommendation(this)">
+                            <div class="item-preview">◈</div>
+                            <div class="item-details">
+                                <h4>Leather Boots</h4>
+                                <p>Brown, mid-height</p>
+                                <div class="match-badge">88% match</div>
+                            </div>
+                        </div>
+
+                        <div class="recommendation-card" onclick="selectRecommendation(this)">
+                            <div class="item-preview">◊</div>
+                            <div class="item-details">
+                                <h4>White Oxford</h4>
+                                <p>Classic fit</p>
+                                <div class="match-badge">85% match</div>
+                            </div>
+                        </div>
+
+                        <div class="tip-card">
+                            <h4>💡 Shopping tip</h4>
+                            <p>Focus on neutrals that match your existing palette. You wear black, white, and gray 80% of the time.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Navigation -->
+                <div class="bottom-nav">
+                    <div class="nav-item active" onclick="switchScreen('capture', this)">
+                        <div class="nav-icon">●</div>
+                        <div>Today</div>
+                    </div>
+                    <div class="nav-item" onclick="switchScreen('analytics', this)">
+                        <div class="nav-icon">◐</div>
+                        <div>Stats</div>
+                    </div>
+                    <div class="nav-item" onclick="switchScreen('insights', this)">
+                        <div class="nav-icon">◆</div>
+                        <div>Insights</div>
+                    </div>
+                    <div class="nav-item" onclick="showNotification('Closet feature coming soon!')">
+                        <div class="nav-icon">☰</div>
+                        <div>Closet</div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 
-    <div class="smallContainer">
-      <div class="smallContent">1</div>
-      <div class="smallContent">2</div>
-      <div class="smallContent">3</div>
-      <div class="smallContent">Anything</div>
-      <div class="smallContent">5</div>
-      <div class="smallContent">6</div>
+    <script>
+        // Update time
+        function updateTime() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const timeStr = `${hours > 12 ? hours - 12 : hours}:${minutes}`;
+            document.getElementById('time').textContent = timeStr;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // Update date
+        const today = new Date();
+        const options = { weekday: 'long', month: 'long', day: 'numeric' };
+        document.getElementById('currentDate').textContent = today.toLocaleDateString('en-US', options);
+
+        // Switch screens
+        function switchScreen(screen, navElement) {
+            // Hide all screens
+            document.querySelectorAll('.screen-view').forEach(view => {
+                view.classList.remove('active');
+            });
+            
+            // Remove active from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected screen
+            let title, subtitle;
+            switch(screen) {
+                case 'capture':
+                    document.getElementById('captureView').classList.add('active');
+                    title = "Today's Outfit";
+                    subtitle = "Day 12 of 28";
+                    break;
+                case 'analytics':
+                    document.getElementById('analyticsView').classList.add('active');
+                    title = "Your Stats";
+                    subtitle = "12 days tracked";
+                    // Animate streak number on entry
+                    setTimeout(() => {
+                        const streak = document.getElementById('streakNumber');
+                        streak.style.animation = 'none';
+                        setTimeout(() => {
+                            streak.style.animation = 'countUp 0.5s ease-out';
+                        }, 10);
+                    }, 100);
+                    break;
+                case 'insights':
+                    document.getElementById('insightsView').classList.add('active');
+                    title = "Your Insights";
+                    subtitle = "Personalized for you";
+                    break;
+            }
+            
+            // Update header
+            document.getElementById('screenTitle').textContent = title;
+            document.getElementById('screenSubtitle').textContent = subtitle;
+            
+            // Set active nav
+            navElement.classList.add('active');
+        }
+
+        // Handle capture
+        function handleCapture() {
+            const box = document.getElementById('captureBox');
+            const preview = document.getElementById('imagePreview');
+            
+            box.style.display = 'none';
+            preview.src = 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&h=280&fit=crop';
+            preview.style.display = 'block';
+            
+            showNotification('Photo captured! 📸');
+        }
+
+        // Select pill
+        function selectPill(element) {
+            document.querySelectorAll('.pill').forEach(pill => {
+                pill.classList.remove('active');
+            });
+            element.classList.add('active');
+        }
+
+        // Save entry
+        function saveEntry() {
+            const btn = document.getElementById('saveBtn');
+            const spinner = document.getElementById('loadingSpinner');
+            
+            btn.style.display = 'none';
+            spinner.style.display = 'block';
+            
+            setTimeout(() => {
+                spinner.style.display = 'none';
+                btn.style.display = 'block';
+                btn.classList.add('success');
+                btn.textContent = '✓ Saved!';
+                
+                showNotification('Outfit saved successfully! Keep up the streak! 🔥');
+                
+                // Update streak
+                const currentStreak = parseInt(document.getElementById('streakNumber').textContent);
+                document.getElementById('streakNumber').textContent = currentStreak + 1;
+                
+                setTimeout(() => {
+                    btn.classList.remove('success');
+                    btn.textContent = 'Save Entry';
+                    
+                    // Reset form
+                    document.getElementById('captureBox').style.display = 'flex';
+                    document.getElementById('imagePreview').style.display = 'none';
+                    document.querySelector('.notes-input').value = '';
+                }, 2000);
+            }, 1500);
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Animate card
+        function animateCard(element) {
+            element.style.animation = 'pulse 0.3s ease';
+            setTimeout(() => {
+                element.style.animation = '';
+            }, 300);
+        }
+
+        // Animate color
+        function animateColor(element) {
+            element.style.animation = 'bounce 0.5s ease';
+            setTimeout(() => {
+                element.style.animation = '';
+            }, 500);
+            
+            const percent = element.getAttribute('data-percent');
+            showNotification(`This color makes up ${percent} of your wardrobe`);
+        }
+
+        // Select recommendation
+        function selectRecommendation(element) {
+            element.style.background = '#e8f5e9';
+            setTimeout(() => {
+                element.style.background = '';
+                showNotification('Added to wishlist! 💚');
+            }, 300);
+        }
+
+        // Add some initial animations
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.stat-card, .recommendation-card, .color-box').forEach((el, i) => {
+                el.style.animation = `fadeIn 0.5s ease-out ${i * 0.1}s backwards`;
+            });
+        });
+    </script>
+
+    <!-- User Flow Section -->
+    <div style="max-width: 1400px; margin: 40px auto; padding: 0 20px;">
+        <div class="user-flow-section" style="background: white; border-radius: 24px; padding: 48px; box-shadow: 0 10px 40px rgba(0,0,0,0.08);">
+            <h2 style="text-align: center; margin-bottom: 20px; color: #1d1d1f; font-size: 36px; font-weight: 600;">User Journey: From Problem to Solution</h2>
+            <p style="text-align: center; color: #86868b; margin-bottom: 48px; font-size: 18px;">How Digital Wardrobe solves decision fatigue in 28 days</p>
+
+            <!-- Problem Statement -->
+            <div style="background: linear-gradient(135deg, #fee2e2, #fecaca); padding: 32px; border-radius: 20px; margin-bottom: 48px; text-align: center;">
+                <h3 style="color: #dc2626; margin-bottom: 16px; font-size: 24px;">😰 The Problem</h3>
+                <p style="color: #991b1b; font-size: 16px; line-height: 1.6; max-width: 600px; margin: 0 auto;">
+                    "I buy clothes impulsively, they don't match my wardrobe, and I never know what I actually need. I waste money on pieces I never wear and still feel like I have nothing to wear."
+                </p>
+            </div>
+
+            <!-- User Flow Steps -->
+            <div class="flow-container" style="position: relative; padding: 0 20px;">
+                <!-- Week 1: Awareness -->
+                <div class="flow-section" style="margin-bottom: 60px; position: relative;">
+                    <div style="background: #f5f5f7; padding: 8px 20px; border-radius: 20px; display: inline-block; margin-bottom: 24px;">
+                        <strong>Week 1: Discovery Phase</strong>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                        <div class="flow-step" style="background: #fafafa; padding: 24px; border-radius: 16px; border-left: 4px solid #667eea; transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='translateX(4px)'; this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
+                            <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                                <span style="background: #667eea; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 12px;">1</span>
+                                <h4 style="color: #1d1d1f; font-size: 18px; margin: 0;">Download & Onboard</h4>
+                            </div>
+                            <p style="color: #86868b; font-size: 14px; line-height: 1.5; margin-bottom: 12px;">User downloads app after seeing targeted ads about "decision fatigue" and "smart shopping"</p>
+                            <div style="background: #e8f3ff; padding: 12px; border-radius: 8px;">
+                                <strong style="color: #0066cc; font-size: 13px;">✓ Solves:</strong>
+                                <span style="color: #0066cc; font-size: 13px;">Provides structure to chaotic shopping habits</span>
+                            </div>
+                        </div>
+
+                        <div class="flow-step" style="background: #fafafa; padding: 24px; border-radius: 16px; border-left: 4px solid #667eea; transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='translateX(4px)'; this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
+                            <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                                <span style="background: #667eea; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 12px;">2</span>
+                                <h4 style="color: #1d1d1f; font-size: 18px; margin: 0;">First Photo</h4>
+                            </div>
+                            <p style="color: #86868b; font-size: 14px; line-height: 1.5; margin-bottom: 12px;">Takes first outfit photo (30 seconds). Answers "How do you feel?" with "Something's missing"</p>
+                            <div style="background: #e8f3ff; padding: 12px; border-radius: 8px;">
+                                <strong style="color: #0066cc; font-size: 13px;">✓ Solves:</strong>
+                                <span style="color: #0066cc; font-size: 13px;">Starts building self-awareness</span>
+                            </div>
+                        </div>
+
+                        <div class="flow-step" style="background: #fafafa; padding: 24px; border-radius: 16px; border-left: 4px solid #667eea; transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='translateX(4px)'; this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
+                            <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                                <span style="background: #667eea; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 12px;">3</span>
+                                <h4 style="color: #1d1d1f; font-size: 18px; margin: 0;">Daily Habit Forms</h4>
+                            </div>
+                            <p style="color: #86868b; font-size: 14px; line-height: 1.5; margin-bottom: 12px;">Morning notification: "What are you wearing today?" User builds 7-day streak</p>
+                            <div style="background: #e8f3ff; padding: 12px; border-radius: 8px;">
+                                <strong style="color: #0066cc; font-size: 13px;">✓ Solves:</strong>
+                                <span style="color: #0066cc; font-size: 13px;">Creates consistent data collection</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Week 2: Patterns -->
+                <div class="flow-section" style="margin-bottom: 60px;">
+                    <div style="background: #f5f5f7; padding: 8px 20px; border-radius: 20px; display: inline-block; margin-bottom: 24px;">
+                        <strong>Week 2: Pattern Recognition</strong>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                        <div class="flow-step" style="background: #fafafa; padding: 24px; border-radius: 16px; border-left: 4px solid #764ba2; transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='translateX(4px)'; this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
+                            <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                                <span style="background: #764ba2; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 12px;">4</span>
+                                <h4 style="color: #1d1d1f; font-size: 18px; margin: 0;">First Insights</h4>
+                            </div>
+                            <p style="color: #86868b; font-size: 14px; line-height: 1.5; margin-bottom: 12px;">Unlocks analytics: "You wear black 40% of the time" and "Friday is your happiest outfit day"</p>
+                            <div style="background: #f3e8ff; padding: 12px; border-radius: 8px;">
+                                <strong style="color: #7c3aed; font-size: 13px;">✓ Solves:</strong>
+                                <span style="color: #7c3aed; font-size: 13px;">Reveals unconscious preferences</span>
+                            </div>
+                        </div>
+
+                        <div class="flow-step" style="background: #fafafa; padding: 24px; border-radius: 16px; border-left: 4px solid #764ba2; transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='translateX(4px)'; this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
+                            <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                                <span style="background: #764ba2; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 12px;">5</span>
+                                <h4 style="color: #1d1d1f; font-size: 18px; margin: 0;">Gap Identification</h4>
+                            </div>
+                            <p style="color: #86868b; font-size: 14px; line-height: 1.5; margin-bottom: 12px;">AI notices: "You've mentioned 'need a blazer' 3 times when wearing casual outfits to work"</p>
+                            <div style="background: #f3e8ff; padding: 12px; border-radius: 8px;">
+                                <strong style="color: #7c3aed; font-size: 13px;">✓ Solves:</strong>
+                                <span style="color: #7c3aed; font-size: 13px;">Identifies real wardrobe gaps</span>
+                            </div>
+                        </div>
+
+                        <div class="flow-step" style="background: #fafafa; padding: 24px; border-radius: 16px; border-left: 4px solid #764ba2; transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='translateX(4px)'; this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
+                            <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                                <span style="background: #764ba2; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 12px;">6</span>
+                                <h4 style="color: #1d1d1f; font-size: 18px; margin: 0;">Social Validation</h4>
+                            </div>
+                            <p style="color: #86868b; font-size: 14px; line-height: 1.5; margin-bottom: 12px;">Shares weekly style summary on Instagram Stories, friends ask about the app</p>
+                            <div style="background: #f3e8ff; padding: 12px; border-radius: 8px;">
+                                <strong style="color: #7c3aed; font-size: 13px;">✓ Solves:</strong>
+                                <span style="color: #7c3aed; font-size: 13px;">Creates accountability</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Week 3-4: Action -->
+                <div class="flow-section" style="margin-bottom: 60px;">
+                    <div style="background: #f5f5f7; padding: 8px 20px; border-radius: 20px; display: inline-block; margin-bottom: 24px;">
+                        <strong>Week 3-4: Smart Action Phase</strong>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                        <div class="flow-step" style="background: #fafafa; padding: 24px; border-radius: 16px; border-left: 4px solid #34c759; transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='translateX(4px)'; this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
+                            <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                                <span style="background: #34c759; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 12px;">7</span>
+                                <h4 style="color: #1d1d1f; font-size: 18px; margin: 0;">Personalized Recs</h4>
+                            </div>
+                            <p style="color: #86868b; font-size: 14px; line-height: 1.5; margin-bottom: 12px;">Gets recommendation: "Navy blazer would complete 8 of your recent outfits" with shopping links</p>
+                            <div style="background: #dcfce7; padding: 12px; border-radius: 8px;">
+                                <strong style="color: #16a34a; font-size: 13px;">✓ Solves:</strong>
+                                <span style="color: #16a34a; font-size: 13px;">Prevents impulse buying</span>
+                            </div>
+                        </div>
+
+                        <div class="flow-step" style="background: #fafafa; padding: 24px; border-radius: 16px; border-left: 4px solid #34c759; transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='translateX(4px)'; this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
+                            <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                                <span style="background: #34c759; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 12px;">8</span>
+                                <h4 style="color: #1d1d1f; font-size: 18px; margin: 0;">Smart Purchase</h4>
+                            </div>
+                            <p style="color: #86868b; font-size: 14px; line-height: 1.5; margin-bottom: 12px;">Buys recommended blazer. App tracks: "This completed 12 outfits this month!"</p>
+                            <div style="background: #dcfce7; padding: 12px; border-radius: 8px;">
+                                <strong style="color: #16a34a; font-size: 13px;">✓ Solves:</strong>
+                                <span style="color: #16a34a; font-size: 13px;">Validates purchase decisions</span>
+                            </div>
+                        </div>
+
+                        <div class="flow-step" style="background: #fafafa; padding: 24px; border-radius: 16px; border-left: 4px solid #34c759; transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='translateX(4px)'; this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
+                            <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                                <span style="background: #34c759; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 12px;">9</span>
+                                <h4 style="color: #1d1d1f; font-size: 18px; margin: 0;">28-Day Report</h4>
+                            </div>
+                            <p style="color: #86868b; font-size: 14px; line-height: 1.5; margin-bottom: 12px;">Receives insights: "Satisfaction up 35%, Cost per wear down 40%, Style consistency improved"</p>
+                            <div style="background: #dcfce7; padding: 12px; border-radius: 8px;">
+                                <strong style="color: #16a34a; font-size: 13px;">✓ Solves:</strong>
+                                <span style="color: #16a34a; font-size: 13px;">Proves ROI of mindful shopping</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Solution -->
+                <div style="background: linear-gradient(135deg, #dcfce7, #bbf7d0); padding: 32px; border-radius: 20px; text-align: center;">
+                    <h3 style="color: #16a34a; margin-bottom: 16px; font-size: 24px;">✨ The Solution</h3>
+                    <p style="color: #15803d; font-size: 16px; line-height: 1.6; max-width: 600px; margin: 0 auto 20px;">
+                        "I now know exactly what I own, what I actually wear, and what I need. My purchases are intentional, everything in my closet works together, and getting dressed is effortless."
+                    </p>
+                    <div style="display: flex; justify-content: center; gap: 40px; margin-top: 24px; flex-wrap: wrap;">
+                        <div style="animation: fadeIn 0.8s ease-out;">
+                            <div style="font-size: 32px; font-weight: bold; color: #16a34a;">-60%</div>
+                            <div style="color: #15803d; font-size: 14px;">Impulse purchases</div>
+                        </div>
+                        <div style="animation: fadeIn 0.8s ease-out 0.2s backwards;">
+                            <div style="font-size: 32px; font-weight: bold; color: #16a34a;">+85%</div>
+                            <div style="color: #15803d; font-size: 14px;">Outfit satisfaction</div>
+                        </div>
+                        <div style="animation: fadeIn 0.8s ease-out 0.4s backwards;">
+                            <div style="font-size: 32px; font-weight: bold; color: #16a34a;">3.2x</div>
+                            <div style="color: #15803d; font-size: 14px;">Better cost-per-wear</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Touchpoints -->
+            <div style="margin-top: 60px; padding: 32px; background: #fafafa; border-radius: 20px;">
+                <h3 style="text-align: center; margin-bottom: 32px; color: #1d1d1f;">Key User Touchpoints That Drive Success</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; text-align: center;">
+                    <div style="transition: transform 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform=''">
+                        <div style="font-size: 32px; margin-bottom: 8px;">⏰</div>
+                        <h4 style="color: #1d1d1f; margin-bottom: 8px;">Daily Reminder</h4>
+                        <p style="color: #86868b; font-size: 14px;">9 AM: "What's today's look?"</p>
+                    </div>
+                    <div style="transition: transform 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform=''">
+                        <div style="font-size: 32px; margin-bottom: 8px;">📸</div>
+                        <h4 style="color: #1d1d1f; margin-bottom: 8px;">Quick Capture</h4>
+                        <p style="color: #86868b; font-size: 14px;">30 seconds to log</p>
+                    </div>
+                    <div style="transition: transform 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform=''">
+                        <div style="font-size: 32px; margin-bottom: 8px;">📊</div>
+                        <h4 style="color: #1d1d1f; margin-bottom: 8px;">Weekly Insights</h4>
+                        <p style="color: #86868b; font-size: 14px;">Sunday style summary</p>
+                    </div>
+                    <div style="transition: transform 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform=''">
+                        <div style="font-size: 32px; margin-bottom: 8px;">🎯</div>
+                        <h4 style="color: #1d1d1f; margin-bottom: 8px;">Smart Recs</h4>
+                        <p style="color: #86868b; font-size: 14px;">Data-driven suggestions</p>
+                    </div>
+                    <div style="transition: transform 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform=''">
+                        <div style="font-size: 32px; margin-bottom: 8px;">💚</div>
+                        <h4 style="color: #1d1d1f; margin-bottom: 8px;">Validation</h4>
+                        <p style="color: #86868b; font-size: 14px;">"Great investment!"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="footer">
-      <p>
-        2019 Cat Investigation Consortium
-      </p>
-    </div>
-
-    <div>
-
 </body>
-
 </html>
